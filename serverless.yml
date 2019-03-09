@@ -16,6 +16,31 @@ functions:
       - http:
           path : /api
           method : POST
+  mongoGetAll:
+    handler: api/api.mongoGetAll
+    events :
+      - http:
+          path : /api
+          method : GET
+  mongoGetOne:
+    handler: api/api.mongoGetOne
+    events :
+      - http:
+          path : /api/{id}
+          method : GET
+  mongoUpdate:
+    handler: api/api.mongoUpdate
+    events :
+      - http:
+          path : /api/{id}
+          method : PUT
+  mongoDelete:
+    handler: api/api.mongoDelete
+    events :
+      - http:
+          path : /api/{id}
+          method : DELETE
+
 
 
 

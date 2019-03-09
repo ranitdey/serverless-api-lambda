@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ranit-geek/lambda-serverless#readme",
   "dependencies": {
+    "joi": "^14.3.1",
     "mongoose": "^5.4.18",
     "serverless-http": "^1.9.1",
     "serverless-offline": "^4.8.1"
