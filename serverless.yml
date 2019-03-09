@@ -1,16 +1,21 @@
 
 service: aws-nodejs # NOTE: update this with your service name
 
-
-
 provider:
   name: aws
   runtime: nodejs8.10
 
+plugins:
+  - serverless-offline
 
 
 functions:
-  hello:
-    handler: handler.hello
+  mongoInsert:
+    handler: api/api.mongoInsert
+    events :
+      - http:
+          path : /api
+          method : POST
+
 
 
