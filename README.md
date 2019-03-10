@@ -1,7 +1,9 @@
 # lambda-serverless
-Serverless api built using `Serverless framework` and `Lambda functions`.This API uses `MongoDB` as a database for all CRUD operations.This application is ready to be deployed in AWS Lambda and with Serverless framework its just a command away. Only we need to configure the AWS account settings in the Serverless.YML . 
+Serverless api built using `Serverless framework` , `Lambda functions` , `AWS API Gateway Proxy` and `NodeJS` .This API uses `MongoDB` as a database for all CRUD operations.This application is ready to be deployed in AWS Lambda and with Serverless framework its just a command away. Only we need to configure the AWS account settings in the Serverless.YML . 
 
 ## Running project
+TODO: <br  />
+1.Authentication
 
 ### Run server locally with serverless framework
 ```sh
