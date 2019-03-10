@@ -29,7 +29,7 @@ module.exports.mongoInsert = async (event, context,callback) => {
 };
 
 
-module.exports.mongoGetAll=async (event, context, callback)=>{
+module.exports.mongoGetAll= async (event, context, callback)=>{
   context.callbackWaitsForEmptyEventLoop=false;
   const connection =await mongoConnection
                             .catch(()=>callback(new Error("Mongo connection failed"),null))
@@ -45,17 +45,18 @@ module.exports.mongoGetAll=async (event, context, callback)=>{
 module.exports.mongoGetOne=async (event, context, callback)=>{
   context.callbackWaitsForEmptyEventLoop=false;
   const connection =await mongoConnection
+                            .then(async ()=>{
+                              const result = await Product.findById(event.pathParameters.id)
+                                .then((result)=>callback(null,{
+                                  statusCode: 200,
+                                  body : JSON.stringify(result)
+                                              }))
+                                .catch(()=>callback(null,{
+                                  statusCode : 404,
+                                  body : "404 not found"
+                                })) 
+                            })
                             .catch(()=>callback(new Error("Mongo connection failed"),null))
-  const result = await Product.findById(event.pathParameters.id)
-                    .catch(()=>callback(new Error("Mongo query failed"),{
-                      statusCode : 404,
-                      body : "404 not found"
-                    }))
-  callback(null,{
-    statusCode: 200,
-    body : JSON.stringify(result)
-                })
- 
 }
 
 
@@ -66,18 +67,22 @@ module.exports.mongoUpdate=async (event, context, callback)=>{
   {
     const connection =await mongoConnection
                  .then( async ()=>{
-                        const result = await Product.findOneAndUpdate({_id : event.pathParameters.id},JSON.parse(event.body),{new : true})
-                              .catch(()=>callback(new Error("Mongo query failed"),{
-                                        statusCode : 404,
-                                        body : "404 not found"
+                   const query = await Product.findById(event.pathParameters.id)
+                                .then( async ()=>{
+                                  const result = await Product.findOneAndUpdate({_id : event.pathParameters.id},JSON.parse(event.body),{new : true})    
+                                      .then(()=> callback(null,{
+                                        statusCode: 200,
+                                        body : "Updated"
                                       }))
-                                  })
+                                      .catch(()=>callback(new Error("Mongo query failed"),null))
+                                          })
+                                .catch(()=>callback(null,{
+                                            statusCode : 404,
+                                            body : "404 not found"
+                                         }))
+                                })
+                        
                   .catch(()=>callback(new Error("Mongo connection failed"),null))
-
-      callback(null,{
-        statusCode: 200,
-        body : "Updated"
-      })
     }
   else{
     callback(null,{
@@ -85,25 +90,26 @@ module.exports.mongoUpdate=async (event, context, callback)=>{
       body: "Bad request"
     })
   }
-
- 
 }
 
 module.exports.mongoDelete=async (event, context, callback)=>{
   context.callbackWaitsForEmptyEventLoop=false;
   const connection =await mongoConnection
                             .then( async ()=>{
-                              const result = await Product.findOneAndRemove({_id : event.pathParameters.id})
-                              .catch(()=>callback(new Error("Mongo query failed"),{
+                              const query = await Product.findById(event.pathParameters.id)
+                              .then(async ()=>{
+                                const result = await Product.findOneAndRemove({_id : event.pathParameters.id})
+                                  .then(()=>callback(null,{
+                                    statusCode: 200,
+                                    body : "Deleted"
+                                                }))
+                                  .catch(()=>callback(new Error("Mongo query failed"),null))
+                              })
+                              .catch(()=>callback(null,{
                                 statusCode : 404,
                                 body : "404 not found"
                               }))
 
                             })
                             .catch(()=>callback(new Error("Mongo connection failed"),null))
-  callback(null,{
-    statusCode: 200,
-    body : "Deleted"
-                })
- 
 }
