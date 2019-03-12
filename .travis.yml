@@ -4,7 +4,7 @@ node_js:
 services:
   - mongodb
 
-after_script:
+before_script:
   - sls offline start --port 4500 --skipCacheInvalidation &
   - sleep 15
 
