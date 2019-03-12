@@ -22,6 +22,7 @@ async function userActionPost(URL)
     assert.equal(responseJson.name,Body.name)
     assert.equal(responseJson.description,Body.description)
     should.exist(responseJson._id)
+    console.log("Test001 passed")
   }
 
   userActionPost(url)
