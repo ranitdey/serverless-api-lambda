@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - "10.15.2"
+services:
+  - mongodb
+
+before_install:
+  - sls offline start --port 4500 --skipCacheInvalidation &
+  - sleep 15
+
+
+script:
+  - node ./test/api-test.js
